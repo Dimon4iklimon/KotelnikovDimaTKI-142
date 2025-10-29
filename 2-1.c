@@ -1,65 +1,94 @@
 #define _CRT_SECURE_NO_WARNINGS
-#include<locale.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <locale.h>
 
-/** @brief Получает значение числа
- * @return Полученное число типа double
+/**
+ * @brief рассчитывает сумму 
+ * @param a первое число
+ * @param b второе число
+ * @return возвращает рассчитанную сумму 
  */
-double get_number();
+double getAmount(const double a, const double b);
 
-/** @brief Получает выбор действия пользователя
- * @return Номер выбранного действия
+/**
+ * @brief рассчитывает разность
+ * @param a первое число
+ * @param b второе число
+ * @return возвращает рассчитанную разность
  */
-int get_action();
+double getDifference(const double a, const double b);
 
-/*
- * @brief Перечисление действий с переменными
- * @details Amount - Сложение
- *          Difference - Вычитание
- *          Average - Среднее арифметическое 
-*/
-enum { Amount, Difference, Average };
-
-/** @brief Точка входа в программу.
- * @return 0 в случае успеха
- * @return 1 в случае неудачи
+/**
+ * @brief рассчитывает среднее арифметическое 
+ * @param a первое число
+ * @param b второе число
+ * @return возвращает рассчитанное среднее арифметическое 
  */
-int main(void) {
+double getAverage(const double a, const double b);
+
+/**
+ * @brief считывает значение,
+ * введенное с клавиатуры с проверкой ввода
+ * @return считанное значение
+ */
+double getValue();
+
+/**
+ * @brief проверяет,что переменная положительная
+ * @param value значение проверяемой переменной
+ */
+void checkValue(const double value);
+
+/**
+ * @brief Точка входа в программу
+ * @return возвращает 0, если программма выполнена корректно
+ */
+int main(void)
+{
     setlocale(LC_ALL, "Russian");
-    const double A = get_number();
-    const double B = get_number();
-    const int Action = get_action();
-
-    switch (Action) {
-    case Amount:
-        printf("Сумма чисел равна: %lf", A + B);
-        break;
-    case Difference:
-        printf("Разность чисел равна: %lf", A - B);
-        break;
-    case Average:
-        printf("Среднее арифметическое чисел равно: %lf", (A + B) / 2);
-        break;
-    default:
-        printf("Ошибка: неверный выбор операции.");
-        return 1;
-    }
+    printf("Введите числа a и b : ");
+    double a = getValue();
+    checkValue(a);
+    double b = getValue();
+    checkValue(b);
+    printf("Сумма = %.2lf\n", getAmount(a, b));
+    printf("Разность = %.2lf\n", getDifference(a, b));
+    printf("Среднее арифметическое = %.2lf\n", getAverage(a, b));
     return 0;
 }
 
-double get_number() {
-    static int counter = 1;
-    printf("Введите %s число: ", counter == 1 ? "первое" : "второе");
-    double number = 0;
-    scanf("%lf", &number);
-    counter++;
-    return number;
+double getAmount(const double a, const double b)
+{
+    return a + b;
 }
 
-int get_action() {
-    printf("%d — Сложение\n%d — Вычитание\n%d — Среднее арифметическое\n", Amount, Difference, Average);
-    printf("Выберите операцию с переменными: ");
-    int action;
-    scanf("%d", &action);
-    return action;
+double getDifference(const double a, const double b)
+{
+    return a - b;
+}
+
+double getAverage(const double a, const double b)
+{
+    return (a + b) / 2;
+}
+
+double getValue()
+{
+    double value = 0;
+    if (!scanf("%lf", &value))
+    {
+        printf("Error\n");
+        abort();
+    }
+    return value;
+}
+
+void checkValue(const double value)
+{
+    if (value <= 0)
+    {
+        printf("Value have to be positive\n");
+        abort();
+    }
 }
